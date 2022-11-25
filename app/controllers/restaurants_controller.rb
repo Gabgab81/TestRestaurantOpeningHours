@@ -8,6 +8,7 @@ class RestaurantsController < ApplicationController
 
     def show
         @restaurant = Restaurant.find(params[:id])
+        # raise
     end
 
     def new
@@ -21,13 +22,24 @@ class RestaurantsController < ApplicationController
     end
 
     def destroy
-        
+        @restaurant = Restaurant.find(params[:id])
+        # raise
+        @restaurant.destroy
+        redirect_to restaurants_path, status: :see_other
     end
 
     private
 
     def restaurant_params
-        params.require(:restaurant).permit(:name)
+        params.require(:restaurant).permit(:name, schedules_attributes:[
+            :id,
+            :am_opens_at,
+            :am_closes_at,
+            :pm_opens_at,
+            :pm_closes_at,
+            :weekday,
+            :_destroy
+        ])
     end
 
 end
