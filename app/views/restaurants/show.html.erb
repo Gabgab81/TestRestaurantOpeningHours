@@ -1,3 +1,13 @@
 <h1><%= @restaurant.name %></h1>
 
+<% @restaurant.schedules.each do |schedule| %>
+    <p>-------------------------</p>
+    <p><%= schedule.weekday %></p>
+    <p><%= schedule.am_opens_at %></p>
+    <p><%= schedule.am_closes_at %></p>
+    <p><%= schedule.pm_opens_at %></p>
+    <p><%= schedule.pm_closes_at %></p>
+    <p>-------------------------</p>
+<% end %>
+
 <%= link_to "All restaurants", restaurants_path %>

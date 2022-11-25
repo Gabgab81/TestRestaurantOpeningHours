@@ -3,3 +3,52 @@
   <%= f.input :name %>
   <%= f.submit "Submit restaurant", class: "btn btn-primary" %>
 <% end %>
+
+<%= form_for @restaurant do |s| %>
+
+  <%= s.label :name, "Restaurant name:" %>
+  <%= s.text_field :name %>
+
+  <table class="schedule-editor">
+    <thead>
+      <tr>
+        <th>Day</th>
+        <th>Opens at</th>
+        <th>Closes at</th>
+      </tr>
+    </thead>
+
+    <tbody>    
+      <% weekdays.each do |day| %>      
+        <%= s.fields_for :schedules, s.object.schedules.find_or_initialize_by(weekday: day[:value]) do |sched| %>        
+          <tr>          
+            <td>
+              <%= sched.hidden_field :weekday %>
+              <div class="checkbox">
+                <%= sched.check_box :_destroy, {checked: sched.object.persisted?}, "0", "1" %>
+                <%= sched.label :_destroy, day[:label] %>
+              </div>
+            </td>          
+            <td>
+              <%= sched.label :am_opens_at, class: "visually-hidden" %>
+              <%= sched.time_field :am_opens_at %>
+            </td>          
+            <td>
+              <%= sched.label :am_closes_at, class: "visually-hidden" %>
+              <%= sched.time_field :am_closes_at %>
+            </td> 
+            <td>
+              <%= sched.label :pm_opens_at, class: "visually-hidden" %>
+              <%= sched.time_field :pm_opens_at %>
+            </td>          
+            <td>
+              <%= sched.label :pm_closes_at, class: "visually-hidden" %>
+              <%= sched.time_field :pm_closes_at %>
+            </td>       
+          </tr>     
+        <% end %>    
+      <% end %>  
+    </tbody>
+  </table>
+  <%= s.submit "valid" %>
+<% end %>
