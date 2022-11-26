@@ -3,6 +3,7 @@
 <% @restaurants.each do |restaurant| %>
     <p><%= link_to "#{restaurant.name}", restaurant_path(restaurant) %> 
     <%= link_to "Delete", restaurant_path(restaurant), data: {turbo_method: :delete, turbo_confirm: "Are you sure?"} %></p>
+    <p><%= restaurant.open? ? "Open" : "Closed" %></p>
 <% end %>
 
 <%= link_to "Create a restaurant", new_restaurant_path %>
