@@ -1,7 +1,9 @@
 class Restaurant < ApplicationRecord
     has_many :schedules, dependent: :destroy
+    # , inverse_of: :restaurant
     accepts_nested_attributes_for :schedules, allow_destroy: true
 
+    validates :schedules, presence: true
     validates :name, presence: true
 
     def open?
