@@ -8,7 +8,7 @@ class RestaurantsController < ApplicationController
 
     def show
         @restaurant = Restaurant.find(params[:id])
-        raise
+        # raise
     end
 
     def new
@@ -18,8 +18,10 @@ class RestaurantsController < ApplicationController
     def create
         @restaurant = Restaurant.new(restaurant_params)
         if @restaurant.save
+            # raise
             redirect_to restaurant_path(@restaurant)
         else
+            # raise
             render :new, status: :unprocessable_entity
         end
     end
