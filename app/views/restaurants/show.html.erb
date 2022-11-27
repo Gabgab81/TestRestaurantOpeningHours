@@ -1,13 +1,20 @@
 <h1><%= @restaurant.name %></h1>
 
 <% @restaurant.schedules.each do |schedule| %>
-    <p>-------------------------</p>
-    <p><%= schedule.weekday %></p>
-    <p><%= schedule.am_opens_at %></p>
-    <p><%= schedule.am_closes_at %></p>
-    <p><%= schedule.pm_opens_at %></p>
-    <p><%= schedule.pm_closes_at %></p>
-    <p>-------------------------</p>
+    <% if schedule.am_closes_at.nil? %>
+        <p><%= weekdays[schedule.weekday - 1][:label] %> : <%= schedule.am_opens_at.strftime("%H:%M") %> - <%= schedule.pm_closes_at.strftime("%H:%M") %></p>
+    <% else %>
+    <p><%= weekdays[schedule.weekday - 1][:label] %> </p>
+        <p><%= schedule.am_opens_at.strftime("%H:%M") %> - <%= schedule.am_closes_at.strftime("%H:%M") %></p>
+        <p><%= schedule.pm_opens_at.strftime("%H:%M") %> - <%= schedule.pm_closes_at.strftime("%H:%M") %></p>
+    <% end %>
 <% end %>
+
+<%= time_ago_in_words(Time.now + 100000) %>
+<%# build in helper %>
+<p> <%= Time.now.wday %> </p>
+<p> <%= 70.minutes.ago %></p>
+
+
 
 <%= link_to "All restaurants", restaurants_path %>
