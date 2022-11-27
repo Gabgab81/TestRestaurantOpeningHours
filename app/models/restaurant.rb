@@ -7,6 +7,7 @@ class Restaurant < ApplicationRecord
     validates :name, presence: true
 
     def open?
+        isOpen = false
         time = Time.now
         time = time.in_time_zone('Eastern Time (US & Canada)').strftime("%H:%M")
         schedule = schedules.where(weekday: Time.zone.now.wday).first
@@ -18,16 +19,12 @@ class Restaurant < ApplicationRecord
                 (!schedule.am_closes_at.nil? && 
                 ((time > schedule.am_opens_at.strftime("%H:%M") && time < schedule.am_closes_at.strftime("%H:%M")) || 
                 (time > schedule.pm_opens_at.strftime("%H:%M") && time < schedule.pm_closes_at.strftime("%H:%M"))))
-                # p 'if1'
-                return true
-            else
-                # p 'else1'
-                return false
-                
+                p 'if1'
+                isOpen =  true 
             end
         else
-            # p 'elseé'
-            false    
+            p 'elseé'
+            isOpen    
         end
     end
 
