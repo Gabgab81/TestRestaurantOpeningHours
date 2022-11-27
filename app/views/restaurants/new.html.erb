@@ -105,12 +105,44 @@
             <td>
               <%= sched.label :pm_closes_at, class: "visually-hidden" %>
               <%= sched.time_field :pm_closes_at %>
-            </td>       
+            </td> 
+            <td>
+              <%= day[:value] - 1 %>
+            </td>
+            <td>
+              <%= params[:restaurant][:schedules_attributes][(day[:value] - 1).to_s][:_destroy] if !params[:restaurant].nil? %>
+            </td>
+            <td>
+              <% invalid = @restaurant.errors.include?("schedules.am_opens_at") && !params[:restaurant].nil? && params[:restaurant][:schedules_attributes][(day[:value] - 1).to_s][:_destroy] == "0" %>
+              <% if invalid %>
+              <div class="invalid-feedback d-block">
+                <% @restaurant.errors.full_messages_for("schedules.am_opens_at").each do |error_message| %>
+                  <%= error_message %>.
+                <% end %>
+              </div>
+              <% end %>
+              <% invalid = @restaurant.errors.include?("schedules.pm_closes_at")  && !params[:restaurant].nil? && params[:restaurant][:schedules_attributes][(day[:value] - 1).to_s][:_destroy] == "0" %>
+              <% if invalid %>
+              <div class="invalid-feedback d-block">
+                <% @restaurant.errors.full_messages_for("schedules.pm_closes_at").each do |error_message| %>
+                  <%= error_message %>.
+                <% end %>
+              </div>
+              <% end %>
+            </td>      
           </tr>     
         <% end %>    
       <% end %>  
     </tbody>
   </table>
+  <% invalid = @restaurant.errors.include?(:schedules) %>
+  <% if invalid %>
+    <div class="invalid-feedback d-block">
+      <% @restaurant.errors.full_messages_for(:schedules).each do |error_message| %>
+        <%= error_message %>.
+      <% end %>
+    </div>
+  <% end %>
   <%= s.submit "valid" %>
 <% end %>
 <% end %>
