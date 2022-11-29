@@ -19,35 +19,26 @@ class Restaurant < ApplicationRecord
                 (!schedule.am_closes_at.nil? && 
                 ((time > schedule.am_opens_at.strftime("%H:%M") && time < schedule.am_closes_at.strftime("%H:%M")) || 
                 (time > schedule.pm_opens_at.strftime("%H:%M") && time < schedule.pm_closes_at.strftime("%H:%M"))))
-                p 'if1'
                 isOpen =  true 
             end
         else
-            p 'elseé'
             isOpen    
         end
     end
 
-    def openHoursToday(schedule)
+    def whenClose
         if self.open?
-            # todayOpen = schedules.where(weekday: Time.now.wday).first
-            if schedule.am_closes_at.nil?
-                "#{schedule.am_opens_at.strftime("%H:%M")} - #{schedule.pm_closes_at.strftime("%H:%M")}"
+            schedule = schedules.where(weekday: Time.now.wday).first
+            time = Time.now.strftime("%H:%M")
+            timeMached = /(\d*):(\d*)/.match(time)
+            durationTime = timeMached[1].to_i * 3600 + timeMached[2].to_i * 60
+            if !schedule.am_closes_at.nil? && time < schedule.am_closes_at.strftime("%H:%M")
+                hourSecond(schedule.am_closes_at.strftime("%H:%M")) - durationTime
             else
-                "#{schedule.am_opens_at.strftime("%H:%M")} - #{schedule.am_closes_at.strftime("%H:%M")} / #{schedule.pm_opens_at.strftime("%H:%M")} - #{schedule.pm_closes_at.strftime("%H:%M")}"
+                hourSecond(schedule.pm_closes_at.strftime("%H:%M")) - durationTime
             end
         else
-            "Closed"
-        end
-    end
-
-    def openHoursWeek
-        schedules.each do |schedule|
-            if schedule.am_closes_at.nil?
-                "#{weekdays[schedule.weekday - 1][:label]}: #{schedule.am_opens_at.strftime("%H:%M")} - #{schedule.pm_closes_at.strftime("%H:%M")}"
-            else
-                "#{weekdays[schedule.weekday - 1][:label]}: #{schedule.am_opens_at.strftime("%H:%M")} - #{schedule.am_closes_at.strftime("%H:%M")} / #{schedule.pm_opens_at.strftime("%H:%M")} - #{schedule.pm_closes_at.strftime("%H:%M")}"
-            end
+            0
         end
     end
 
@@ -69,12 +60,12 @@ class Restaurant < ApplicationRecord
             durationTime = timeMached[1].to_i * 3600 + timeMached[2].to_i * 60
             if !todayOpen.empty? && (amOpen > time || (!pmOpen.nil? && pmOpen > time)) 
                 if amOpen > time
-                    openHourSecond(amOpen) - durationTime
+                    hourSecond(amOpen) - durationTime
                 else
-                    openHourSecond(amOpen) - durationTime
+                    hourSecond(amOpen) - durationTime
                 end
             else
-                nday * 3600 * 24 - durationTime + openHourSecond(amOpen)
+                nday * 3600 * 24 - durationTime + hourSecond(amOpen)
             end
         else
             0
@@ -83,8 +74,8 @@ class Restaurant < ApplicationRecord
 
     private
 
-    def openHourSecond(amOpen)
-        openHour = /(\d*):(\d*)/.match(amOpen)
+    def hourSecond(h)
+        openHour = /(\d*):(\d*)/.match(h)
         dopenHour = openHour[1].to_i * 3600 + openHour[2].to_i * 60
     end
 
