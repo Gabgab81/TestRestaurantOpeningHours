@@ -52,22 +52,47 @@
                 <%= sched.time_field :pm_closes_at %>
             </td> 
             <td>
-                <% invalid = @restaurant.errors.include?("schedules.am_opens_at") && !params[:restaurant].nil? && params[:restaurant][:schedules_attributes][(day[:value] - 1).to_s][:_destroy] == "0" %>
+                
+                <% invalid = invalid?("schedules.am_opens_at", day) %>
+
                 <% if invalid %>
-                <div class="invalid-feedback d-block">
-                <% @restaurant.errors.full_messages_for("schedules.am_opens_at").each do |error_message| %>
-                    <%= error_message %>.
-                <% end %>
+                    <div class="invalid-feedback d-block">
+                    <% @restaurant.errors.full_messages_for("schedules.am_opens_at").each do |error_message| %>
+                        <%= error_message %>.
+                    <% end %>
                 </div>
                 <% end %>
-                <% invalid = @restaurant.errors.include?("schedules.pm_closes_at")  && !params[:restaurant].nil? && params[:restaurant][:schedules_attributes][(day[:value] - 1).to_s][:_destroy] == "0" %>
+
+                <% invalid = invalid?("schedules.pm_closes_at", day) %>
+
                 <% if invalid %>
-                <div class="invalid-feedback d-block">
-                <% @restaurant.errors.full_messages_for("schedules.pm_closes_at").each do |error_message| %>
-                    <%= error_message %>.
+                    <div class="invalid-feedback d-block">
+                    <% @restaurant.errors.full_messages_for("schedules.pm_closes_at").each do |error_message| %>
+                        <%= error_message %>.
+                    <% end %>
+                    </div>
                 <% end %>
-                </div>
+
+                <% invalid = invalid?("schedules.am_closes_at", day) %>
+
+                <% if invalid %>
+                    <div class="invalid-feedback d-block">
+                    <% @restaurant.errors.full_messages_for("schedules.am_closes_at").each do |error_message| %>
+                        <%= error_message %>.
+                    <% end %>
+                    </div>
                 <% end %>
+
+                <% invalid = invalid?("schedules.pm_opens_at", day) %>
+
+                <% if invalid %>
+                    <div class="invalid-feedback d-block">
+                    <% @restaurant.errors.full_messages_for("schedules.pm_opens_at").each do |error_message| %>
+                        <%= error_message %>.
+                    <% end %>
+                    </div>
+                <% end %>
+
             </td>      
             </tr>     
         <% end %>    
