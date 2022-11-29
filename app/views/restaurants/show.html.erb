@@ -13,10 +13,10 @@
 
 <p>--------</p>
 
-
-<p><%#= time_ago_in_words(Time.now + @restaurant.whenOpen) %></p>
-<p><%= ActiveSupport::Duration.build(@restaurant.whenOpen).inspect  %></p>
-
-
+<% if @restaurant.open? %>
+    <p><%= @restaurant.name %> is open. It will close in <%= ActiveSupport::Duration.build(@restaurant.whenClose).inspect  %></p>
+<% else %>
+    <p><%= @restaurant.name %> is closed. It will open in <%= ActiveSupport::Duration.build(@restaurant.whenOpen).inspect  %></p>
+<% end %>
 
 <%= link_to "All restaurants", restaurants_path %>
