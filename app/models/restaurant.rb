@@ -28,6 +28,29 @@ class Restaurant < ApplicationRecord
         end
     end
 
+    def openHoursToday(schedule)
+        if self.open?
+            # todayOpen = schedules.where(weekday: Time.now.wday).first
+            if schedule.am_closes_at.nil?
+                "#{schedule.am_opens_at.strftime("%H:%M")} - #{schedule.pm_closes_at.strftime("%H:%M")}"
+            else
+                "#{schedule.am_opens_at.strftime("%H:%M")} - #{schedule.am_closes_at.strftime("%H:%M")} / #{schedule.pm_opens_at.strftime("%H:%M")} - #{schedule.pm_closes_at.strftime("%H:%M")}"
+            end
+        else
+            "Closed"
+        end
+    end
+
+    def openHoursWeek
+        schedules.each do |schedule|
+            if schedule.am_closes_at.nil?
+                "#{weekdays[schedule.weekday - 1][:label]}: #{schedule.am_opens_at.strftime("%H:%M")} - #{schedule.pm_closes_at.strftime("%H:%M")}"
+            else
+                "#{weekdays[schedule.weekday - 1][:label]}: #{schedule.am_opens_at.strftime("%H:%M")} - #{schedule.am_closes_at.strftime("%H:%M")} / #{schedule.pm_opens_at.strftime("%H:%M")} - #{schedule.pm_closes_at.strftime("%H:%M")}"
+            end
+        end
+    end
+
     def whenOpen
         if !self.open?
             todayOpen = schedules.where(weekday: Time.now.wday)

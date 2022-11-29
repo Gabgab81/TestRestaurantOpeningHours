@@ -1,26 +1,19 @@
 <h1><%= @restaurant.name %></h1>
 
 <% @restaurant.schedules.each do |schedule| %>
-    <%= schedule.weekday %>
     <% if schedule.am_closes_at.nil? %>
         <p><%= weekdays[schedule.weekday - 1][:label] %> : <%= schedule.am_opens_at.strftime("%H:%M") %> - <%= schedule.pm_closes_at.strftime("%H:%M") %></p>
     <% else %>
-    <p><%= weekdays[schedule.weekday - 1][:label] %> </p>
-        <p><%= schedule.am_opens_at.strftime("%H:%M") %> - <%= schedule.am_closes_at.strftime("%H:%M") %></p>
-        <p><%= schedule.pm_opens_at.strftime("%H:%M") %> - <%= schedule.pm_closes_at.strftime("%H:%M") %></p>
+    <p><%= weekdays[schedule.weekday - 1][:label] %>:
+        <%= schedule.am_opens_at.strftime("%H:%M") %> - <%= schedule.am_closes_at.strftime("%H:%M") %> / 
+        <%= schedule.pm_opens_at.strftime("%H:%M") %> - <%= schedule.pm_closes_at.strftime("%H:%M") %>
+    </p>
     <% end %>
 <% end %>
 
 <p>--------</p>
 
-<%#= time_ago_in_words(Time.now + 60) %>
-<%# build in helper %>
-<p> <%= Time.now.wday %> </p>
-<p> <%= Time.now.strftime("%H:%M")  %> </p>
-<p> <%= Time.now.utc %> </p>
-<p> <%= 70.minutes.ago %></p>
-<p><%= @restaurant.schedules.first.weekday %></p>
-<p><%= @restaurant.whenOpen %></p>
+
 <p><%#= time_ago_in_words(Time.now + @restaurant.whenOpen) %></p>
 <p><%= ActiveSupport::Duration.build(@restaurant.whenOpen).inspect  %></p>
 
